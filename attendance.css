@@ -1,0 +1,16 @@
+#attendanceDiv{
+	width: 890px;
+}
+
+.ui-datepicker {
+    background: white;
+    border: 1px solid #555;
+    color: black;
+    display: none;
+}
+
+.ui-datepicker-next{
+	padding-left: 91px;
+}
+
+
