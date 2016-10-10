@@ -13,4 +13,10 @@
 	padding-left: 91px;
 }
 
+a:link {
+	font-family:Arial; color:blue;
+}
 
+.attDetailsInputField{
+	background: #FFFACD;
+}
