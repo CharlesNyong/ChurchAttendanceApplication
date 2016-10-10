@@ -4,6 +4,7 @@ include("Conn.php");
 
 		var $dtmDate;
 		var $intDay;
+		var $intAttendanceID;
 		var $intMen;
 		var $intWomen;
 		var $intChildren;
@@ -31,6 +32,7 @@ include("Conn.php");
 			<script type="text/javascript" src="test.js"></script> 
 			<script>
 				var objobjMyGrid;
+				var intAttendanceDetails = 0;
 				window.onload = function(){
 					 $("#dateFilter").datepicker();
 					 // objMyGrid = new dhtmlXGridObject('attendanceDiv');                 
@@ -48,6 +50,12 @@ include("Conn.php");
 					var dtmSelectedDate = document.getElementById("dateFilter").value;
 					document.getElementById("dateEntered").value = dtmSelectedDate;
 					document.getElementById("frmFilter").submit();
+				}
+			
+				function showPopUpWindow(intAttendanceID){
+					var strURL = "attendanceDetails.php?intAttendanceID="+intAttendanceID;
+					window.open(strURL,intAttendanceDetails,'width=640,height=350,scrollbars=yes');
+					intAttendanceDetails++;
 				}
 			</script>	
 			<?
@@ -71,6 +79,7 @@ include("Conn.php");
 			<?$this->loadAttendance($_POST["dateEntered"])?>
 			<table border="1" style="width:900px; text-align:center;">
 				<tr>
+					<th>RowNO</th>
 					<th>Date</th>
 					<th>Day</th>
 					<th>Men</th>
@@ -80,8 +89,12 @@ include("Conn.php");
 					<th>Sunday School</th>
 				</tr>
 				<?if($this->arrAttendanceRecords != NULL){
+					$intRowCount = 0;
+					//echo $this->intAttendanceID;
 					foreach ($this->arrAttendanceRecords as $intAttID => $arrRows) {?>
+					<?$intRowCount++;?>
 						<tr>
+						<td><a href="#" onclick=<?echo "showPopUpWindow(".$this->intAttendanceID.")";?> ><?echo $intRowCount;?></a></td>	
 						<?foreach ($arrRows as $mixKey => $mixValue) {?>
 							<?if($mixKey != "intAttendanceID"){?>
 								<td><?echo $mixValue?></td>
@@ -118,6 +131,7 @@ include("Conn.php");
 			$rsResult = mysqli_query($connection, $strSQL);
 			//$this->strSQLString = $strSQL;
 			while ($arrRow = mysqli_fetch_assoc($rsResult)) {
+				$this->intAttendanceID = $arrRow["intAttendanceID"];
 				$this->arrAttendanceRecords[$arrRow["intAttendanceID"]] = $arrRow;
 			}
 		}
