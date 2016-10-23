@@ -33,6 +33,7 @@ include("Conn.php");
 			<script>
 				var objobjMyGrid;
 				var intAttendanceDetails = 0;
+				var blnNewAttendance;
 				window.onload = function(){
 					 $("#dateFilter").datepicker();
 					 // objMyGrid = new dhtmlXGridObject('attendanceDiv');                 
@@ -51,9 +52,27 @@ include("Conn.php");
 					document.getElementById("dateEntered").value = dtmSelectedDate;
 					document.getElementById("frmFilter").submit();
 				}
-			
+				
+				function deleteAttendance(intAttendanceID){
+					var response = confirm("Are you sure you want to delete this attendance?");
+					if(response == true){
+						document.getElementById("attendanceID").value = intAttendanceID;
+						//document.getElementById("dateEntered").value = dtmSelectedDate
+						document.getElementById("blnDeleteAttendance").value = 1;
+						document.getElementById("frmFilter").submit();
+						//alert("You said yes");
+					}
+				}
+
 				function showPopUpWindow(intAttendanceID){
-					var strURL = "attendanceDetails.php?intAttendanceID="+intAttendanceID;
+					if(intAttendanceID == null){
+						blnNewAttendance = true;
+					}
+					else{
+						blnNewAttendance = false;
+					}
+
+					var strURL = "attendanceDetails.php?intAttendanceID="+intAttendanceID+"&blnIsNewAttendance="+blnNewAttendance;
 					window.open(strURL,intAttendanceDetails,'width=640,height=350,scrollbars=yes');
 					intAttendanceDetails++;
 				}
@@ -68,6 +87,8 @@ include("Conn.php");
 			ob_start();
 			$strHTML = $this->javaScript();	
 			?>
+			<div class="newAttendanceBtn" onclick="showPopUpWindow(null)">New Attendance</div>
+			<hr/>
 			<form method="post" id="frmFilter" action="<?=$_SERVER['PHP_SELF'];?>">
 				<fieldset style="width:400px;">
 					<legend>Filters</legend>
@@ -75,8 +96,26 @@ include("Conn.php");
 					<input type="button" value="Filter" onclick="filterByDate()"/>
 				</fieldset>
 				<input type="hidden" value="" id="dateEntered" name="dateEntered"/>
+				<input type="hidden" value="" id="attendanceID" name="intAttendanceID"/>
+				<input type="hidden" value="0" id="blnDeleteAttendance" name="blnDeleteAttendance"/>
 			</form>
-			<?$this->loadAttendance($_POST["dateEntered"])?>
+			<? var_dump($_POST); 
+			if($_POST["blnDeleteAttendance"] == 1){
+					$this->deleteAttendance($_POST["intAttendanceID"]);
+				}
+				if ($_POST["dateEntered"]) {
+					$_SESSION["dateEntered"] = $_POST["dateEntered"]; 
+				}
+
+				if ($_POST["dateEntered"]  == "") {
+					session_start();
+					$this->loadAttendance($_SESSION["dateEntered"]);
+				}
+				else{
+					$this->loadAttendance($_POST["dateEntered"]);	
+				}
+				
+			?>
 			<table border="1" style="width:900px; text-align:center;">
 				<tr>
 					<th>RowNO</th>
@@ -94,7 +133,7 @@ include("Conn.php");
 					foreach ($this->arrAttendanceRecords as $intAttID => $arrRows) {?>
 					<?$intRowCount++;?>
 						<tr>
-						<td><a href="#" onclick=<?echo "showPopUpWindow(".$this->intAttendanceID.")";?> ><?echo $intRowCount;?></a></td>	
+						<td ondblclick=<?echo "deleteAttendance(".$this->intAttendanceID.")";?> ><a href="#" onclick=<?echo "showPopUpWindow(".$this->intAttendanceID.")";?> ><?echo $intRowCount;?></a></td>	
 						<?foreach ($arrRows as $mixKey => $mixValue) {?>
 							<?if($mixKey != "intAttendanceID"){?>
 								<td><?echo $mixValue?></td>
@@ -104,7 +143,7 @@ include("Conn.php");
 					<?}
 				}
 				else{?>
-					<tr><td colspan='7'><h3 style='text-align:center;'>There are no records for that date.</h3></td></tr>
+					<tr><td colspan='8'><h3 style='text-align:center;'>The is no record for that date.</h3></td></tr>
 				<?}?>	
 			</table>
 			<? 	
@@ -113,6 +152,16 @@ include("Conn.php");
 			return $strHTML;	
 		}
 
+		function deleteAttendance($intAttendanceID){
+			global $connection;
+			$strSQL = "DELETE FROM asikpo_attendance.tblChurchAttendance
+			 			WHERE intAttendanceID = '$intAttendanceID' "; 
+				
+			$rsResult = mysqli_query($connection, $strSQL);
+			if($rsResult){
+				echo "<script>alert('Item Deleted')</script>";
+			}	
+		}
 
 		function loadAttendance($dtmDateToFilter){
 			global $connection;
