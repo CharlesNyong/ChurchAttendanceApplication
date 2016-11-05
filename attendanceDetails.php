@@ -15,18 +15,23 @@ $strError = "";
 // 	$objAttendanceData = new attendanceData();	
 // }
 
-// var_dump($_POST);
+ //var_dump($_POST);
 if($_POST["blnSaveRecord"] == 1){
-	echo "user saving";
+	//echo "user saving";
 	if($_POST["blnIsNewAttendance"] == "true" || $blnIsNewAttendance == "true"){
 		$objAttendanceData->setDate($_POST["dtmDate"]);
-		$objAttendanceData->setDay($_POST["strDay"]);
-		$objAttendanceData->setMenCount($_POST["intMen"]);
-		$objAttendanceData->setWomenCount($_POST["intWomen"]);
-		$objAttendanceData->setChildrenCount($_POST["intChildren"]);
-		$objAttendanceData->setTotal($_POST["intTotal"]);
+		$objAttendanceData->setServiceType($_POST["strServiceType"]);
+		$objAttendanceData->setMaleCount($_POST["intMale"]);
+		$objAttendanceData->setFemaleCount($_POST["intFemale"]);
+		$objAttendanceData->setFemaleStudentCount($_POST["intFemaleStdField"]);
+		$objAttendanceData->setMaleStudentCount($_POST["intMaleStd"]);
+		$objAttendanceData->setPreacher($_POST["strPreacher"]);
+		$objAttendanceData->setMessage($_POST["strMessage"]);
+		$objAttendanceData->setFirstTimer($_POST["intFirstTimer"]);
+		$objAttendanceData->setChildrenCount($_POST["intChildrenFieldField"]);
+		$objAttendanceData->setTotal($_POST["intTotalField"]);
 		$objAttendanceData->setSundaySchoolCount($_POST["intSundaySchool"]);
-		//saveAttendance($objAttendanceData);
+		saveAttendance($objAttendanceData);
 	}
 	else{
 		$strError = "Error: Please use the Save Edits button to save any updates! You will have to close this window and try this again.";
@@ -42,11 +47,16 @@ if($_POST["blnUpdateRecord"] == 1){
 			$objAttendanceData->setAttendanceID($_POST["AttendanceID"]);
 		}	
 		$objAttendanceData->setDate($_POST["dtmDate"]);
-		$objAttendanceData->setDay($_POST["strDay"]);
-		$objAttendanceData->setMenCount($_POST["intMen"]);
-		$objAttendanceData->setWomenCount($_POST["intWomen"]);
-		$objAttendanceData->setChildrenCount($_POST["intChildren"]);
-		$objAttendanceData->setTotal($_POST["intTotal"]);
+		$objAttendanceData->setServiceType($_POST["strServiceType"]);
+		$objAttendanceData->setMaleCount($_POST["intMale"]);
+		$objAttendanceData->setFemaleCount($_POST["intFemale"]);
+		$objAttendanceData->setFemaleStudentCount($_POST["intFemaleStdField"]);
+		$objAttendanceData->setMaleStudentCount($_POST["intMaleStd"]);
+		$objAttendanceData->setPreacher($_POST["strPreacher"]);
+		$objAttendanceData->setMessage($_POST["strMessage"]);
+		$objAttendanceData->setFirstTimer($_POST["intFirstTimer"]);
+		$objAttendanceData->setChildrenCount($_POST["intChildrenFieldField"]);
+		$objAttendanceData->setTotal($_POST["intTotalField"]);
 		$objAttendanceData->setSundaySchoolCount($_POST["intSundaySchool"]);
 		updateAttendanceRecord($objAttendanceData);
 	}
@@ -82,10 +92,10 @@ $strHTML = "";
 	}
 
 	function loadAttendanceOnPage(arrJsAttendanceRecords){
-		alert(typeof(arrJsAttendanceRecords));
-		var keys = Object.keys(arrJsAttendanceRecords);
+		// alert(typeof(arrJsAttendanceRecords));
+		var keys = Object.keys(arrJsAttendanceRecords); // grab the indices for each object
 		for (var i = 0; i < keys.length; i++) {
-		    var objKeys = Object.keys(arrJsAttendanceRecords[keys[i]]);
+		    var objKeys = Object.keys(arrJsAttendanceRecords[keys[i]]); // grab the object keys
 		    for(var k = 0; k< objKeys.length; k++){
 		    	//alert("key: "+ objKeys[k] + arrJsAttendanceRecords[keys[i]][objKeys[k]]);
 		    	//alert(typeof(objKeys[k]));
@@ -93,17 +103,32 @@ $strHTML = "";
 					case "dtmDate":
 						document.getElementById('dateField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
-					case "strDay":
-						document.getElementById('dayField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+					case "strServiceType":
+						document.getElementById('ServiceField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
-					case "intMen":
-						document.getElementById('menField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+					case "intMale":
+						document.getElementById('MaleField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
-					case "intWomen":
-						document.getElementById('womenField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+					case "intFemale":
+						document.getElementById('FemaleField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
+					case "intFemaleStudents":
+						document.getElementById('FemaleStdField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+						break;
+					case "intMaleStudents":
+						document.getElementById('MaleStdField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+						break;
+					case "strMessage":
+						document.getElementById('messageField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+						break;			
+					case "strPreacher":
+						document.getElementById('PreacherField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+						break;
+					case "intFirstTimer":
+						document.getElementById('FirstTimerField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+						break;					
 					case "intChildren":
-						document.getElementById('childrenField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
+						document.getElementById('ChildrenField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
 					case "intTotal":
 						document.getElementById('totalField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
@@ -112,6 +137,22 @@ $strHTML = "";
 						document.getElementById('sundaySchField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];						
 				}
 		    }		
+		}
+	}
+
+	function CalcTotal(){
+		var intMaleValue = document.getElementById('MaleField').value;
+		var intMaleStudentVaue = document.getElementById('MaleStdField').value;
+		var intFemaleValue = document.getElementById('FemaleField').value;
+		var intFemaleStudentValue = document.getElementById('FemaleStdField').value;
+		var intChildrenValue = document.getElementById('ChildrenField').value;
+		var intTotal = 0;
+		if(intMaleStudentVaue == "" || intFemaleValue == "" || intFemaleStudentValue == "" || intChildrenValue == "" || intMaleValue == ""){
+			alert("The fields below must be entered before calculating.\n Male\n Male Students \n Female \n Female Students \n Children");
+		}
+		else{
+			intTotal = (parseInt(intMaleValue) + parseInt(intFemaleValue) + parseInt(intMaleStudentVaue) + parseInt(intChildrenValue) + parseInt(intFemaleStudentValue));
+			document.getElementById('totalField').value = intTotal;
 		}
 	}
 
@@ -162,11 +203,16 @@ $strHTML = "";
 	<fieldset style="width:400px;">
 		<legend>Attendance details</legend>
 		Date: <input id="dateField" class="attDetailsInputField" type="text" name="dtmDate"></input><br/>
-		Day: <input id="dayField" class="attDetailsInputField" type="text" name="strDay"></input><br/>
-		Number of men: <input id="menField" class="attDetailsInputField" type="text" name="intMen"></input><br/>
-		Number of women: <input id="womenField" class="attDetailsInputField" type="text" name="intWomen"></input><br/>
-		Number of children: <input id="childrenField" class="attDetailsInputField" type="text" name="intChildren"></input><br/>
-		Total: <input id="totalField" class="attDetailsInputField" type="text" name="intTotal"></input><br/>
+		Service Type: <input id="ServiceField" class="attDetailsInputField" type="text" name="strServiceType"></input><br/>
+		<span style="padding-top:0px;">Message: </span><span><textarea id="messageField" class="attDetailsInputField" name="strMessage" cols="50" rows="4"></textarea></span><br/>
+		Preacher: <input id="PreacherField" class="attDetailsInputField" type="text" name="strPreacher"></input><br/>
+		First Timer: <input id="FirstTimerField" class="attDetailsInputField" type="text" name="intFirstTimer"></input><br/>
+		Male: <input id="MaleField" class="attDetailsInputField" type="text" name="intMale"></input><br/>
+		Male Students: <input id="MaleStdField" class="attDetailsInputField" type="text" name="intMaleStd"></input><br/>
+		Female: <input id="FemaleField" class="attDetailsInputField" type="text" name="intFemale"></input><br/>
+		Female Students: <input id="FemaleStdField" class="attDetailsInputField" type="text" name="intFemaleStdField"></input><br/>
+		Children: <input id="ChildrenField" class="attDetailsInputField" type="text" name="intChildrenFieldField"></input><br/>
+		intTotal: <input id="totalField" class="attDetailsInputField" type="text" name="intTotalField"></input> <input type="button" value="Calc" onclick="CalcTotal()"><br/>		
 		Sunday School: <input id="sundaySchField" class="attDetailsInputField" type="text" name="intSundaySchool"></input><br/><br/>
 		<input type="button" title="This button saves any update you make to any of the fields above" value="Save Edits" onclick="saveChanges(null)"/> 
 		<input type="button"  title="This button saves new attendance you are trying to create" value="Save New Attendance" onclick="saveChanges(true)"/>
@@ -185,7 +231,7 @@ $strHTML = "";
 function loadAttendaceByID($intAttendanceID){
 	global $connection;
 	$arrAttendanceRecords = array();
-	$strSQL = "SELECT intAttendanceID, dtmDate, strDay, intMen, intWomen, intChildren, intTotal, intSundaySchool
+	$strSQL = "SELECT *
 			 	FROM asikpo_attendance.tblChurchAttendance
 			 	WHERE intAttendanceID = ". $intAttendanceID; 
 				
@@ -203,10 +249,16 @@ function updateAttendanceRecord($objAttendance){
 	$arrOldAttendance = loadAttendaceByID($objAttendance->getAttendanceID());
 	$dtmDate = $objAttendance->getDate();
 	$intAttendanceID = $objAttendance->getAttendanceID();
-	$strDay = $objAttendance->getDay();
-	$intMenCount = $objAttendance->getMenCount();
-	$intWomenCount = $objAttendance->getWomenCount();
+	$strServiceType = $objAttendance->getServiceType();
+	$intMaleCount = $objAttendance->getMaleCount();
+	$intFemaleCount = $objAttendance->getFemaleCount();
 	$intChildrenCount = $objAttendance->getChildrenCount();
+	$intFirstTimer = $objAttendance->getFirstTimer();
+	$strPreacher = $objAttendance->getPreacher();
+	$strMessage = $objAttendance->getMessage();
+	$intFirstTimer = $objAttendance->getFirstTimer();
+	$intFemaleStudentCount = $objAttendance->getFemaleStudentCount();
+	$intMaleStudentCount = $objAttendance->getMaleStudentCount();
 	$intTotal = $objAttendance->getTotal();
 	$intSundaySchool = $objAttendance->getSundaySchoolCount();
 
@@ -218,17 +270,32 @@ function updateAttendanceRecord($objAttendance){
 			if ($mixKey == "dtmDate" && $objAttendance->getDate() != $mixValues) {
 				$strSQL .= " dtmDate = '$dtmDate'".",";
 			}
-			else if($mixKey == "strDay" && $objAttendance->getDay() != $mixValues){
-				$strSQL .= " strDay = '$strDay'".",";			
+			else if($mixKey == "strServiceType" && $objAttendance->getServiceType() != $mixValues){
+				$strSQL .= " strServiceType = '$strServiceType'".",";			
 			}
-			else if($mixKey == "intMen" && $objAttendance->getMenCount() != $mixValues){
-				$strSQL .= " intMen = '$intMenCount'".",";
+			else if($mixKey == "intFirstTimer" && $objAttendance->getFirstTimer() != $mixValues){
+				$strSQL .= " intFirstTimer = '$intFirstTimer'".",";
 			}
-			else if ($mixKey == "intWomen" && $objAttendance->getWomenCount() != $mixValues) {
-				$strSQL .= " intWomen = '$intWomenCount'".",";
+			else if($mixKey == "intMale" && $objAttendance->getMaleCount() != $mixValues){
+				$strSQL .= " intMale = '$intMaleCount'".",";
+			}
+			else if ($mixKey == "intFemale" && $objAttendance->getFemaleCount() != $mixValues) {
+				$strSQL .= " intFemale = '$intFemaleCount'".",";
 			}
 			else if($mixKey == "intChildren" && $objAttendance->getChildrenCount() != $mixValues){
 				$strSQL .= " intChildren = '$intChildrenCount'".",";
+			}
+			else if($mixKey == "intMaleStudents" && $objAttendance->getMaleStudentCount() != $mixValues){
+				$strSQL .= " intMaleStudents = '$intMaleStudentCount'".",";
+			}
+			else if ($mixKey == "intFemaleStudents" && $objAttendance->getFemaleStudentCount() != $mixValues){
+				$strSQL .= " intFemaleStudents = '$intFemaleStudentCount'".",";
+			}
+			else if ($mixKey == "strMessage" && $objAttendance->getMessage() != $mixValues){
+				$strSQL .= " strMessage = '$strMessage'".",";
+			}
+			else if ($mixKey == "strPreacher" && $objAttendance->getPreacher() != $mixValues){
+				$strSQL .= " strPreacher = '$strPreacher'".",";
 			}
 			else if($mixKey == "intTotal" && $objAttendance->getTotal() != $mixValues){
 				$strSQL .= " intTotal = '$intTotal'".",";
@@ -266,20 +333,30 @@ function updateAttendanceRecord($objAttendance){
 
 function saveAttendance($objAttendance){
 	global $connection;
+	global $arrRecords;
 	$dtmDate = $objAttendance->getDate();
-	$strDay = $objAttendance->getDay();
-	$intMenCount = $objAttendance->getMenCount();
-	$intWomenCount = $objAttendance->getWomenCount();
+	$intAttendanceID = $objAttendance->getAttendanceID();
+	$strServiceType = $objAttendance->getServiceType();
+	$intMaleCount = $objAttendance->getMaleCount();
+	$intFemaleCount = $objAttendance->getFemaleCount();
 	$intChildrenCount = $objAttendance->getChildrenCount();
+	$intFirstTimer = $objAttendance->getFirstTimer();
+	$strPreacher = $objAttendance->getPreacher();
+	$strMessage = $objAttendance->getMessage();
+	$intFirstTimer = $objAttendance->getFirstTimer();
+	$intFemaleStudentCount = $objAttendance->getFemaleStudentCount();
+	$intMaleStudentCount = $objAttendance->getMaleStudentCount();
 	$intTotal = $objAttendance->getTotal();
 	$intSundaySchool = $objAttendance->getSundaySchoolCount();
 
 	$strSQL = "INSERT INTO asikpo_attendance.tblChurchAttendance
-				(dtmDate, strDay, intMen, intWomen, intChildren, intTotal, intSundaySchool)	 
-				VALUES ('$dtmDate', '$strDay', '$intMenCount', '$intWomenCount', '$intChildrenCount', '$intTotal', '$intSundaySchool')";
+				(dtmDate, strServiceType, strMessage, strPreacher, intFirstTimer, intMale, intMaleStudents, intFemale, intFemaleStudents, intChildren, intTotal, intSundaySchool)	 
+		VALUES ('$dtmDate', '$strServiceType', '$strMessage', '$strPreacher', '$intFirstTimer', '$intMaleCount', '$intMaleStudentCount', '$intFemaleCount', '$intFemaleStudentCount',
+				'$intChildrenCount', '$intTotal', '$intSundaySchool')";
 	$rsResult = mysqli_query($connection, $strSQL);
 	if($rsResult){
 		echo "Records successfully saved";
+		$arrRecords = loadAttendaceByID(mysqli_insert_id($connection));
 	}
 
 }
