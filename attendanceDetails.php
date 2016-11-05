@@ -301,20 +301,17 @@ function updateAttendanceRecord($objAttendance){
 				$strSQL .= " intTotal = '$intTotal'".",";
 			}
 			else if($mixKey == "intSundaySchool" && $objAttendance->getSundaySchoolCount() != $mixValues){
-				$strSQL .= " intSundaySchool = '$intSundaySchool'";
+				$strSQL .= " intSundaySchool = '$intSundaySchool'".",";
 			}
 		}
 	}
-
-	if($strSQL[strlen($strSQL)-1] == ","){
-		$strSQL[strlen($strSQL)-1] = " WHERE intAttendanceID = $intAttendanceID";
-	}
-	else{
+		$strSQL = substr($strSQL, 0, strlen($strSQL)-1); // drop extra commas
 		$strSQL .= " WHERE intAttendanceID = $intAttendanceID";
-	}
-	$rsResult = mysqli_query($connection, $strSQL);
 	
+	$rsResult = mysqli_query($connection, $strSQL);
+	//echo "Query Used: ". $strSQL;
 	if($rsResult){
+
 		global $arrRecords;
 		global $intAttendanceID;
 		global $blnIsNewAttendance;
