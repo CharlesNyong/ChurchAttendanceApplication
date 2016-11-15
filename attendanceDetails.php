@@ -23,8 +23,8 @@ if($_POST["blnSaveRecord"] == 1){
 		$objAttendanceData->setServiceType($_POST["strServiceType"]);
 		$objAttendanceData->setMaleCount($_POST["intMale"]);
 		$objAttendanceData->setFemaleCount($_POST["intFemale"]);
-		$objAttendanceData->setFemaleStudentCount($_POST["intFemaleStdField"]);
-		$objAttendanceData->setMaleStudentCount($_POST["intMaleStd"]);
+		$objAttendanceData->setFemaleSingleCount($_POST["intFemaleStdField"]);
+		$objAttendanceData->setMaleSingleCount($_POST["intMaleStd"]);
 		$objAttendanceData->setPreacher($_POST["strPreacher"]);
 		$objAttendanceData->setMessage($_POST["strMessage"]);
 		$objAttendanceData->setFirstTimer($_POST["intFirstTimer"]);
@@ -50,8 +50,8 @@ if($_POST["blnUpdateRecord"] == 1){
 		$objAttendanceData->setServiceType($_POST["strServiceType"]);
 		$objAttendanceData->setMaleCount($_POST["intMale"]);
 		$objAttendanceData->setFemaleCount($_POST["intFemale"]);
-		$objAttendanceData->setFemaleStudentCount($_POST["intFemaleStdField"]);
-		$objAttendanceData->setMaleStudentCount($_POST["intMaleStd"]);
+		$objAttendanceData->setFemaleSingleCount($_POST["intFemaleStdField"]);
+		$objAttendanceData->setMaleSingleCount($_POST["intMaleStd"]);
 		$objAttendanceData->setPreacher($_POST["strPreacher"]);
 		$objAttendanceData->setMessage($_POST["strMessage"]);
 		$objAttendanceData->setFirstTimer($_POST["intFirstTimer"]);
@@ -112,10 +112,10 @@ $strHTML = "";
 					case "intFemale":
 						document.getElementById('FemaleField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
-					case "intFemaleStudents":
+					case "intFemaleSingle":
 						document.getElementById('FemaleStdField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
-					case "intMaleStudents":
+					case "intMaleSingle":
 						document.getElementById('MaleStdField').value = arrJsAttendanceRecords[keys[i]][objKeys[k]];
 						break;
 					case "strMessage":
@@ -142,16 +142,16 @@ $strHTML = "";
 
 	function CalcTotal(){
 		var intMaleValue = document.getElementById('MaleField').value;
-		var intMaleStudentVaue = document.getElementById('MaleStdField').value;
+		var intMaleSingleVaue = document.getElementById('MaleStdField').value;
 		var intFemaleValue = document.getElementById('FemaleField').value;
-		var intFemaleStudentValue = document.getElementById('FemaleStdField').value;
+		var intFemaleSingleValue = document.getElementById('FemaleStdField').value;
 		var intChildrenValue = document.getElementById('ChildrenField').value;
 		var intTotal = 0;
-		if(intMaleStudentVaue == "" || intFemaleValue == "" || intFemaleStudentValue == "" || intChildrenValue == "" || intMaleValue == ""){
+		if(intMaleSingleVaue == "" || intFemaleValue == "" || intFemaleSingleValue == "" || intChildrenValue == "" || intMaleValue == ""){
 			alert("The fields below must be entered before calculating.\n Male\n Male Students \n Female \n Female Students \n Children");
 		}
 		else{
-			intTotal = (parseInt(intMaleValue) + parseInt(intFemaleValue) + parseInt(intMaleStudentVaue) + parseInt(intChildrenValue) + parseInt(intFemaleStudentValue));
+			intTotal = (parseInt(intMaleValue) + parseInt(intFemaleValue) + parseInt(intMaleSingleVaue) + parseInt(intChildrenValue) + parseInt(intFemaleSingleValue));
 			document.getElementById('totalField').value = intTotal;
 		}
 	}
@@ -200,20 +200,28 @@ $strHTML = "";
 
 <body onload="doOnLoad()">
 <form method="post" id="frmInputFields" action="<?=$_SERVER['PHP_SELF'];?>">
-	<fieldset style="width:400px;">
+	<fieldset style="width:510px;">
 		<legend>Attendance details</legend>
-		Date: <input id="dateField" class="attDetailsInputField" type="text" name="dtmDate"></input><br/>
-		Service Type: <input id="ServiceField" class="attDetailsInputField" type="text" name="strServiceType"></input><br/>
+		<div>
+		<span style="float:left;"> Date: </span><span><input id="dateField" style="float:left; width:60px;" class="attDetailsInputField" type="text" name="dtmDate"></input></span>
+		<span>Service Type: </span><span><input id="ServiceField" style="width:160px;" class="attDetailsInputField" type="text" name="strServiceType"></input></span>
+		</div><br/>
+		<div>
+		<span style="float:left;">Preacher: </span><span><input id="PreacherField" class="attDetailsInputField" type="text" name="strPreacher"></input></span>
+		<span style="float:left;">First Timer: </span><span><input id="FirstTimerField" style="float:left; width: 30px;" class="attDetailsInputField" type="text" name="intFirstTimer"></input></span>
+		<span style="float:left;">Male: </span><span><input id="MaleField" style="float:left; width: 30px;" class="attDetailsInputField" type="text" name="intMale"></input></span>
+		<span>Male Single: </span><input id="MaleStdField" style="width: 30px;" class="attDetailsInputField" type="text" name="intMaleStd"></input>
+		</div><br/>
+		<div>
+		Female: <input id="FemaleField" class="attDetailsInputField" type="text" name="intFemale"></input>
+		Female Single: <input id="FemaleStdField" class="attDetailsInputField" type="text" name="intFemaleStdField"></input>
+		Children: <input id="ChildrenField" class="attDetailsInputField" type="text" name="intChildrenFieldField"></input>
+		<div><br/>
+		<div>
+		intTotal: <input id="totalField" style="float:left;" class="attDetailsInputField" type="text" name="intTotalField"></input> <input type="button" value="Calc" onclick="CalcTotal()">		
+		Sunday School: <input id="sundaySchField" class="attDetailsInputField" type="text" name="intSundaySchool"></input><br/>
 		<span style="padding-top:0px;">Message: </span><span><textarea id="messageField" class="attDetailsInputField" name="strMessage" cols="50" rows="4"></textarea></span><br/>
-		Preacher: <input id="PreacherField" class="attDetailsInputField" type="text" name="strPreacher"></input><br/>
-		First Timer: <input id="FirstTimerField" class="attDetailsInputField" type="text" name="intFirstTimer"></input><br/>
-		Male: <input id="MaleField" class="attDetailsInputField" type="text" name="intMale"></input><br/>
-		Male Students: <input id="MaleStdField" class="attDetailsInputField" type="text" name="intMaleStd"></input><br/>
-		Female: <input id="FemaleField" class="attDetailsInputField" type="text" name="intFemale"></input><br/>
-		Female Students: <input id="FemaleStdField" class="attDetailsInputField" type="text" name="intFemaleStdField"></input><br/>
-		Children: <input id="ChildrenField" class="attDetailsInputField" type="text" name="intChildrenFieldField"></input><br/>
-		intTotal: <input id="totalField" class="attDetailsInputField" type="text" name="intTotalField"></input> <input type="button" value="Calc" onclick="CalcTotal()"><br/>		
-		Sunday School: <input id="sundaySchField" class="attDetailsInputField" type="text" name="intSundaySchool"></input><br/><br/>
+		<div>
 		<input type="button" title="This button saves any update you make to any of the fields above" value="Save Edits" onclick="saveChanges(null)"/> 
 		<input type="button"  title="This button saves new attendance you are trying to create" value="Save New Attendance" onclick="saveChanges(true)"/>
 	</fieldset>
@@ -236,7 +244,7 @@ function loadAttendaceByID($intAttendanceID){
 			 	WHERE intAttendanceID = ". $intAttendanceID; 
 				
 	$rsResult = mysqli_query($connection, $strSQL);
-	//$this->strSQLString = $strSQL;
+	//echo "Query Used: ". $strSQL;
 	while ($arrRow = mysqli_fetch_assoc($rsResult)) {
 		$arrAttendanceRecords[] = $arrRow;
 	}
@@ -257,8 +265,8 @@ function updateAttendanceRecord($objAttendance){
 	$strPreacher = $objAttendance->getPreacher();
 	$strMessage = $objAttendance->getMessage();
 	$intFirstTimer = $objAttendance->getFirstTimer();
-	$intFemaleStudentCount = $objAttendance->getFemaleStudentCount();
-	$intMaleStudentCount = $objAttendance->getMaleStudentCount();
+	$intFemaleSingleCount = $objAttendance->getFemaleSingleCount();
+	$intMaleSingleCount = $objAttendance->getMaleSingleCount();
 	$intTotal = $objAttendance->getTotal();
 	$intSundaySchool = $objAttendance->getSundaySchoolCount();
 
@@ -285,11 +293,11 @@ function updateAttendanceRecord($objAttendance){
 			else if($mixKey == "intChildren" && $objAttendance->getChildrenCount() != $mixValues){
 				$strSQL .= " intChildren = '$intChildrenCount'".",";
 			}
-			else if($mixKey == "intMaleStudents" && $objAttendance->getMaleStudentCount() != $mixValues){
-				$strSQL .= " intMaleStudents = '$intMaleStudentCount'".",";
+			else if($mixKey == "intMaleSingle" && $objAttendance->getMaleSingleCount() != $mixValues){
+				$strSQL .= " intMaleSingle = '$intMaleSingleCount'".",";
 			}
-			else if ($mixKey == "intFemaleStudents" && $objAttendance->getFemaleStudentCount() != $mixValues){
-				$strSQL .= " intFemaleStudents = '$intFemaleStudentCount'".",";
+			else if ($mixKey == "intFemaleSingle" && $objAttendance->getFemaleSingleCount() != $mixValues){
+				$strSQL .= " intFemaleSingle = '$intFemaleSingleCount'".",";
 			}
 			else if ($mixKey == "strMessage" && $objAttendance->getMessage() != $mixValues){
 				$strSQL .= " strMessage = '$strMessage'".",";
@@ -341,16 +349,22 @@ function saveAttendance($objAttendance){
 	$strPreacher = $objAttendance->getPreacher();
 	$strMessage = $objAttendance->getMessage();
 	$intFirstTimer = $objAttendance->getFirstTimer();
-	$intFemaleStudentCount = $objAttendance->getFemaleStudentCount();
-	$intMaleStudentCount = $objAttendance->getMaleStudentCount();
+	$intFemaleSingleCount = $objAttendance->getFemaleSingleCount();
+	$intMaleSingleCount = $objAttendance->getMaleSingleCount();
 	$intTotal = $objAttendance->getTotal();
 	$intSundaySchool = $objAttendance->getSundaySchoolCount();
 
 	$strSQL = "INSERT INTO asikpo_attendance.tblChurchAttendance
-				(dtmDate, strServiceType, strMessage, strPreacher, intFirstTimer, intMale, intMaleStudents, intFemale, intFemaleStudents, intChildren, intTotal, intSundaySchool)	 
-		VALUES ('$dtmDate', '$strServiceType', '$strMessage', '$strPreacher', '$intFirstTimer', '$intMaleCount', '$intMaleStudentCount', '$intFemaleCount', '$intFemaleStudentCount',
-				'$intChildrenCount', '$intTotal', '$intSundaySchool')";
+				(dtmDate, strServiceType, strMessage, strPreacher, intFirstTimer, intMale, intMaleSingle, intFemale, intFemaleSingle, intChildren, intTotal, intSundaySchool)	 
+			VALUES ('$dtmDate', 
+				'$strServiceType', 
+				'$strMessage', 
+				'$strPreacher', 
+				'$intFirstTimer', 
+				'$intMaleCount', 
+				'$intMaleSingleCount', '$intFemaleCount', '$intFemaleSingleCount','$intChildrenCount', '$intTotal', '$intSundaySchool')";
 	$rsResult = mysqli_query($connection, $strSQL);
+	//echo "Query :". $strSQL;
 	if($rsResult){
 		echo "Records successfully saved";
 		$arrRecords = loadAttendaceByID(mysqli_insert_id($connection));
