@@ -71,11 +71,34 @@ include_once("common.php");
 				function deleteAttendance(intAttendanceID){
 					var response = confirm("Are you sure you want to delete this attendance?");
 					if(response == true){
-						document.getElementById("attendanceID").value = intAttendanceID;
-						//document.getElementById("dateEntered").value = dtmSelectedDate
-						document.getElementById("blnDeleteAttendance").value = 1;
-						document.getElementById("frmFilter").submit();
-						//alert("You said yes");
+						$.ajax({
+							  url: 'common.php',
+							  type: 'POST',
+							  data: {
+							      action: 'deleteAttendanceAjax',
+							      intAttendanceID: intAttendanceID 
+							    },
+							   dataType: 'json',
+							  success: function(data){
+							    if(data[1]){
+							    	alert("Record successfully deleted!");
+							    	location.reload();
+							    }
+							    else if(!data[1]){
+							    	alert("The was a problem trying to delete the record");
+							    }
+							  },
+							  error: function(request, response){
+							    alert(request.responseText);
+							  }
+
+					    });
+	
+						// document.getElementById("attendanceID").value = intAttendanceID;
+						// //document.getElementById("dateEntered").value = dtmSelectedDate
+						// document.getElementById("blnDeleteAttendance").value = 1;
+						// document.getElementById("frmFilter").submit();
+						// //alert("You said yes");
 					}
 				}
 
@@ -236,17 +259,6 @@ include_once("common.php");
 			$strHTML .= ob_get_contents();
 			ob_end_clean();
 			return $strHTML;	
-		}
-
-		function deleteAttendance($intAttendanceID){
-			global $connection;
-			$strSQL = "DELETE FROM asikpo_attendance.tblChurchAttendance
-			 			WHERE intAttendanceID = '$intAttendanceID' "; 
-				
-			$rsResult = mysqli_query($connection, $strSQL);
-			if($rsResult){
-				echo "<script>alert('Item Deleted')</script>";
-			}	
 		}
 
 		function loadByMonth($dtmMonth){
