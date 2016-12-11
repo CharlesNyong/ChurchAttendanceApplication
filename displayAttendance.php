@@ -1,6 +1,7 @@
 <?php
 include_once("Conn.php");
 include_once("common.php");
+
 	class attendance{
 
 		var $dtmDate;
@@ -13,10 +14,11 @@ include_once("common.php");
 		var $intSundaySchoolCount;
 		var $arrAttendanceRecords;
 		var $strSQLString;
+		var $objPagination;
+		var $intRecordCount;
 
 
 		function attendance(){
-
 		}
 
 		function javaScript(){
@@ -105,7 +107,7 @@ include_once("common.php");
 					}
 
 					var strURL = "attendanceDetails.php?intAttendanceID="+intAttendanceID+"&blnIsNewAttendance="+blnNewAttendance;
-					window.open(strURL,intAttendanceDetails,'width=640,height=350,scrollbars=yes');
+					window.open(strURL,intAttendanceDetails,'width=570,height=430,scrollbars=yes resizable=yes');
 					intAttendanceDetails++;
 				}
 			</script>	
@@ -122,13 +124,13 @@ include_once("common.php");
 			<div class="newAttendanceBtn" onclick="showPopUpWindow(null)">New Attendance</div>
 			<span><hr/></span>
 			<form method="post" id="frmFilter" action="<?=$_SERVER['PHP_SELF'];?>">
-				<fieldset style="width:400px;">
+				<fieldset style="width:410px;">
 					<legend>Filters</legend>
 					Filter By Date: <input type="text" id="dateFilter" class="dateDropDown"></input>
 					<input type="button" value="Filter" onclick="filterByDate()"/>
 					<br/>
 					<div class="monthFilterSection">
-					Year: <input type="text" id="intYear"></input>
+					Year: <input type="text" id="intYear" style="width:80px;"></input>
 					Month: <select id="MonthSelect">
 							<option value=""></option>
 							<option value="01">January</option>
@@ -156,16 +158,20 @@ include_once("common.php");
 				<input type="hidden" value="0" id="blnLoadAll" name="blnLoadAll"/>
 				<input type="hidden" value="0" id="blnDeleteAttendance" name="blnDeleteAttendance"/>
 			</form>
-			<? //var_dump($_POST);
-			session_start(); 
-			if($_POST["blnDeleteAttendance"] == 1){
+			 
+			<? 	
+			if(isset($_POST["blnDeleteAttendance"]) && $_POST["blnDeleteAttendance"] == 1){
 				$this->deleteAttendance($_POST["intAttendanceID"]);
 			}
-			if($_POST["blnLoadAll"] == 1){
+
+			if($_POST["blnLoadAll"] == 1 || $_SESSION["blnLoadAll"] == 1){
+				$_SESSION["blnLoadAll"] = 1; 
 				$this->loadAllAttendance();
 			}
 
-			if ($_POST["blnLoadByMonth"] == 1) {
+			if ($_POST["blnLoadByMonth"] == 1 || $_SESSION["blnLoadByMonth"] == 1) {
+				//var_dump($_POST);
+				$_SESSION["blnLoadByMonth"] = 1;
 				$this->loadByMonth($_POST["dtmMonth"]);
 			}
 			if ($_POST["dateEntered"]) {
@@ -180,7 +186,7 @@ include_once("common.php");
 			}
 				//var_dump($this->arrAttendanceRecords);
 			?>
-			<table border="1" style="width:1350px; text-align:center;">
+			<table border="1" style="width:1550px; text-align:center;">
 				<tr>
 					<th>RowNO</th>
 					<th>DATE</th>
@@ -189,9 +195,9 @@ include_once("common.php");
 					<th>PREACHER</th>
 					<th>FIRST TIMERS</th>
 					<th>MALE</th>
-					<th>MALE STUDENTS</th>
+					<th>MALE SINGLE</th>
 					<th>FEMALE</th>
-					<th>FEMALE STUDENTS</th>
+					<th>FEMALE SINGLE</th>
 					<th>CHILDREN</th>
 					<th>TOTAL</th>
 					<th>SUNDAY SCHOOL</th>
@@ -216,7 +222,7 @@ include_once("common.php");
 				}
 				else{?>
 					<tr><td colspan='13'><h3 style='text-align:center;'>The is no record for that date.</h3></td></tr>
-				<?}?>	
+				<?}?>
 			</table>
 			<? 	
 			$strHTML .= ob_get_contents();
@@ -237,23 +243,29 @@ include_once("common.php");
 
 		function loadByMonth($dtmMonth){
 			global $connection;
+			$dtmStartDate = $dtmMonth."-01";
+			$dtmEndDate = $dtmMonth."-31";
 			$strSQL = "SELECT intAttendanceID, dtmDate, strServiceType, strMessage, strPreacher, intFirstTimer, intMale, 
-						intMaleStudents,intFemale, intFemaleStudents, intChildren, intTotal, intSundaySchool
+						intMaleSingle,intFemale, intFemaleSingle, intChildren, intTotal, intSundaySchool
 			 			FROM asikpo_attendance.tblChurchAttendance
-			 			WHERE dtmDate LIKE '%".$dtmMonth."%'";
+			 			WHERE dtmDate BETWEEN '$dtmStartDate' AND '$dtmEndDate'
+			 			ORDER BY intAttendanceID";
 
 			$rsResult = mysqli_query($connection, $strSQL);
-
+			//echo "Query: ".$strSQL;
+			// $this->intRecordCount = mysqli_num_rows($rsResult);
 			while ($arrRow = mysqli_fetch_assoc($rsResult)) {
 				//$this->intAttendanceID = $arrRow["intAttendanceID"];
 				$this->arrAttendanceRecords[$arrRow["intAttendanceID"]] = $arrRow;
-			}	 				
+			}
+			//var_dump($this->arrAttendanceRecords);	 				
 		}	
 		function loadAllAttendance(){
 			global $connection;
 			$strSQL = "SELECT intAttendanceID, dtmDate, strServiceType, strMessage, strPreacher, intFirstTimer, intMale, 
-						intMaleStudents,intFemale, intFemaleStudents, intChildren, intTotal, intSundaySchool
-			 			FROM asikpo_attendance.tblChurchAttendance";
+						intMaleSingle,intFemale, intFemaleSingle, intChildren, intTotal, intSundaySchool
+			 			FROM asikpo_attendance.tblChurchAttendance
+			 			ORDER BY intAttendanceID";
 			$rsResult = mysqli_query($connection, $strSQL);
 
 			while ($arrRow = mysqli_fetch_assoc($rsResult)) {
@@ -273,9 +285,10 @@ include_once("common.php");
 				$this->dtmDate = null;
 			} 		
 			$strSQL = "SELECT intAttendanceID, dtmDate, strServiceType, strMessage, strPreacher, intFirstTimer, intMale, 
-						intMaleStudents,intFemale, intFemaleStudents, intChildren, intTotal, intSundaySchool
+						intMaleSingle,intFemale, intFemaleSingle, intChildren, intTotal, intSundaySchool
 			 			FROM asikpo_attendance.tblChurchAttendance
-			 			WHERE dtmDate = '$this->dtmDate' "; 
+			 			WHERE dtmDate = '$this->dtmDate' 
+			 			ORDER BY intAttendanceID"; 
 				
 			$rsResult = mysqli_query($connection, $strSQL);
 			// if($rsResult){
