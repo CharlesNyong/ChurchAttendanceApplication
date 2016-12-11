@@ -26,19 +26,23 @@ include_once("common.php");
 			$strJs ="";	
 		?>
 			<link rel="stylesheet" type="text/css" href="attendance.css">
-			<link rel="stylesheet" type="text/css" href="../CSS/bootstrap.min.css">
-			<link rel="stylesheet" type="text/css" href="dhtmlxSuite/codebase/dhtmlx.css"></link>
-			<link rel="stylesheet" type="text/css" href="dhtmlxGrid/skins/skyblue/dhtmlxgrid.css"></link>
-			<!-- <link rel="stylesheet" type="text/css" href="dhtmlxGrid/codebase/dhtmlxgrid.css"></link> -->
+			<link rel="stylesheet" type="text/css" href="dhtmlxGrid/codebase/dhtmlxgrid.css"></link>
+			
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 			<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-			<script type="text/javascript" src="dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
-			<script type="text/javascript" src="test.js"></script> 
+			<script type="text/javascript" src="test.js"></script>
+			<!--Data table files -->
+			<script src="http://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+			<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
 			<script>
-				var objobjMyGrid;
 				var intAttendanceDetails = 0;
 				var blnNewAttendance;
+				$(document).ready(function() {
+				    $('#data').DataTable();	
+				});
+
 				window.onload = function(){
+					 
 					 $("#dateFilter").datepicker();
 					 // objMyGrid = new dhtmlXGridObject('attendanceDiv');                 
       //   			  objMyGrid.setHeader("Date,Day,MenCount,WomenCount,ChildrenCount,Total,SundaySchoolCount");//the headers of columns  
@@ -49,7 +53,9 @@ include_once("common.php");
       //   			  objMyGrid.init();      //finishes initialization and renders the grid on the page 
       //      			  objMyGrid.enableSmartRendering(true);
       //      			  objMyGrid.load("attendanceXML.php", "xml");
+
 				}
+
 
 				function filterByDate(){
 					var dtmSelectedDate = document.getElementById("dateFilter").value;
@@ -184,52 +190,48 @@ include_once("common.php");
 			}
 				//var_dump($this->arrAttendanceRecords);
 			?>
-			<div class="container">
-				<div class="row">
-					<div class="col-md-8">
-						<div class="scrollable">
-							<table class="table table-bordered" style="width:1550px;">
-								<tr>
-									<th>RowNO</th>
-									<th>DATE</th>
-									<th>SERVICE</th>
-									<th>MESSAGE</th>
-									<th>PREACHER</th>
-									<th>FIRST TIMERS</th>
-									<th>MALE</th>
-									<th>MALE SINGLE</th>
-									<th>FEMALE</th>
-									<th>FEMALE SINGLE</th>
-									<th>CHILDREN</th>
-									<th>TOTAL</th>
-									<th>SUNDAY SCHOOL</th>
-								</tr>
-								<?if($this->arrAttendanceRecords != NULL){
-									$intRowCount = 0;
-									//echo $this->intAttendanceID;
-									foreach ($this->arrAttendanceRecords as $intAttID => $arrRows) {?>
-									<?$intRowCount++;?>
-										<tr>
-										<td ondblclick=<?echo "deleteAttendance(".$intAttID.")";?> ><a href="#" onclick=<?echo "showPopUpWindow(".$intAttID.")";?> ><?echo $intRowCount;?></a></td>	
-										<?foreach ($arrRows as $mixKey => $mixValue) {?>
-											<?if($mixKey != "intAttendanceID" && $mixKey == "dtmDate"){?>
-												<td><?echo formatDate($mixValue);?></td>
-											<?}
-											else if($mixKey != "intAttendanceID"){?>
-												<td><?echo $mixValue; ?></td>
-											<?}?>		
-										<?}?>
-										</tr> 
-									<?}
-								}
-								else{?>
-									<tr><td colspan='13'><h3 style='text-align:center;'>The is no record for that date.</h3></td></tr>
-								<?}?>
-							</table>
-						</div>	
-					</div>	
-				</div>	
-			</div>	
+			<table border="1" id="data" class="display" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>RowNO</th>
+						<th>DATE</th>
+						<th>SERVICE</th>
+						<th>MESSAGE</th>
+						<th>PREACHER</th>
+						<th>FIRST TIMERS</th>
+						<th>MALE</th>
+						<th>MALE SINGLE</th>
+						<th>FEMALE</th>
+						<th>FEMALE SINGLE</th>
+						<th>CHILDREN</th>
+						<th>TOTAL</th>
+						<th>SUNDAY SCHOOL</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?if($this->arrAttendanceRecords != NULL){
+					$intRowCount = 0;
+					//echo $this->intAttendanceID;
+					foreach ($this->arrAttendanceRecords as $intAttID => $arrRows) {?>
+					<?$intRowCount++;?>
+						<tr>
+						<td ondblclick=<?echo "deleteAttendance(".$intAttID.")";?> ><a href="#" onclick=<?echo "showPopUpWindow(".$intAttID.")";?> ><?echo $intRowCount;?></a></td>	
+						<?foreach ($arrRows as $mixKey => $mixValue) {?>
+							<?if($mixKey != "intAttendanceID" && $mixKey == "dtmDate"){?>
+								<td><?echo formatDate($mixValue);?></td>
+							<?}
+							else if($mixKey != "intAttendanceID"){?>
+								<td><?echo $mixValue; ?></td>
+							<?}?>		
+						<?}?>
+						</tr> 
+					<?}
+				}
+				else{?>
+					<tr><td colspan='13'><h3 style='text-align:center;'>The is no record for that date.</h3></td></tr>
+				<?}?>
+			</tbody>
+			</table>
 			<? 	
 			$strHTML .= ob_get_contents();
 			ob_end_clean();
