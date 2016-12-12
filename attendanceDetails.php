@@ -203,27 +203,37 @@ $strHTML = "";
 	<fieldset style="width:510px;">
 		<legend>Attendance details</legend>
 		<div>
-		<span style="float:left;"> Date: </span><span><input id="dateField" style="float:left; width:60px;" class="attDetailsInputField" type="text" name="dtmDate"></input></span>
-		<span>Service Type: </span><span><input id="ServiceField" style="width:160px;" class="attDetailsInputField" type="text" name="strServiceType"></input></span>
+			<span style="float:left;">Date: <input id="dateField" class="attDetailsInputField" type="text" name="dtmDate"></input></span>
+			<span style="margin-left: 30px;">Service Type: <input id="ServiceField" class="attDetailsInputField" type="text" name="strServiceType"></input></span>
+		</div><br/>	
+		<div>
+			<span style="float:left">First Timer: <input id="FirstTimerField" class="attDetailsInputField" type="text" name="intFirstTimer"></input></span>
+			<span style="margin-left:80px;">Preacher: <input id="PreacherField" class="attDetailsInputField" type="text" name="strPreacher"></input></span>
 		</div><br/>
 		<div>
-		<span style="float:left;">Preacher: </span><span><input id="PreacherField" class="attDetailsInputField" type="text" name="strPreacher"></input></span>
-		<span style="float:left;">First Timer: </span><span><input id="FirstTimerField" style="float:left; width: 30px;" class="attDetailsInputField" type="text" name="intFirstTimer"></input></span>
-		<span style="float:left;">Male: </span><span><input id="MaleField" style="float:left; width: 30px;" class="attDetailsInputField" type="text" name="intMale"></input></span>
-		<span>Male Single: </span><input id="MaleStdField" style="width: 30px;" class="attDetailsInputField" type="text" name="intMaleStd"></input>
+			<span style="float:left">Male: <input id="MaleField" class="attDetailsInputField" type="text" name="intMale"></input></span>
+			<span style="margin-left: 115px;">Male Single: <input id="MaleStdField" class="attDetailsInputField" type="text" name="intMaleStd"></input></span>
 		</div><br/>
 		<div>
-		Female: <input id="FemaleField" class="attDetailsInputField" type="text" name="intFemale"></input>
-		Female Single: <input id="FemaleStdField" class="attDetailsInputField" type="text" name="intFemaleStdField"></input>
-		Children: <input id="ChildrenField" class="attDetailsInputField" type="text" name="intChildrenFieldField"></input>
-		<div><br/>
+			<span style="float:left">Female: <input id="FemaleField" class="attDetailsInputField" type="text" name="intFemale"></input></span>
+			<span style="margin-left: 100px;">Female Single: <input id="FemaleStdField" class="attDetailsInputField" type="text" name="intFemaleStdField"></input></span>
+		</div><br/>
 		<div>
-		intTotal: <input id="totalField" style="float:left;" class="attDetailsInputField" type="text" name="intTotalField"></input> <input type="button" value="Calc" onclick="CalcTotal()">		
-		Sunday School: <input id="sundaySchField" class="attDetailsInputField" type="text" name="intSundaySchool"></input><br/>
-		<span style="padding-top:0px;">Message: </span><span><textarea id="messageField" class="attDetailsInputField" name="strMessage" cols="50" rows="4"></textarea></span><br/>
+			<span style="float:left">Children: <input id="ChildrenField" class="attDetailsInputField" type="text" name="intChildrenFieldField"></input></span>
+			<span style="margin-left: 95px;">Total: <input id="totalField" class="attDetailsInputField" type="text" name="intTotalField"></input> <input type="button" value="Calc" onclick="CalcTotal()"></span>
+		</div><br/>		
 		<div>
-		<input type="button" title="This button saves any update you make to any of the fields above" value="Save Edits" onclick="saveChanges(null)"/> 
-		<input type="button"  title="This button saves new attendance you are trying to create" value="Save New Attendance" onclick="saveChanges(true)"/>
+			<span >Sunday School: <input id="sundaySchField" class="attDetailsInputField" type="text" name="intSundaySchool"></input></span>
+		</div><br/>
+		<span>Message: <textarea id="messageField" class="attDetailsInputField" name="strMessage" cols="50" rows="4"></textarea></span><br/>
+		<? var_dump($_GET);
+		if($blnIsNewAttendance == "false" || !$blnIsNewAttendance  || $_SESSION["blnIsNewAttendance"] == "false" || $_GET["intAttendanceID"] != "null" || $_POST["AttendanceID"] != ""){
+			echo "first condition";?>
+			<input type="button" title="This button saves any update you make to any of the fields above" value="Save Edits" onclick="saveChanges(null)"/>
+		<?}?>
+		<?if($blnIsNewAttendance == "true" || $blnIsNewAttendance  || $_SESSION["blnIsNewAttendance"] == "true" || !$_GET["intAttendanceID"] == null || $_POST["AttendanceID"]==""){?>	 
+			<input type="button"  title="This button saves new attendance you are trying to create" value="Save New Attendance" onclick="saveChanges(true)"/>
+		 <?}?>
 	</fieldset>
 	<input type="hidden" value="0" id="updateRecord" name="blnUpdateRecord"/>
 	<input type="hidden" value="" id="intAttendanceID" name="AttendanceID"/>
