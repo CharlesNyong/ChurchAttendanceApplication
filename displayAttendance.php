@@ -151,6 +151,7 @@ include_once("common.php");
 			ob_start();
 			$strHTML = $this->javaScript();	
 			?>
+			<body style="background-color:#CACAC8;">
 			<div class="newAttendanceBtn" onclick="showPopUpWindow(null)">New Attendance</div>
 			<span><hr/></span>
 			<form method="post" id="frmFilter" action="<?=$_SERVER['PHP_SELF'];?>">
@@ -216,7 +217,7 @@ include_once("common.php");
 			<table border="1" id="data" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>RowNO</th>
+						<th>SETTINGS</th>
 						<th>DATE</th>
 						<th>SERVICE</th>
 						<th>MESSAGE</th>
@@ -238,7 +239,7 @@ include_once("common.php");
 					foreach ($this->arrAttendanceRecords as $intAttID => $arrRows) {?>
 					<?$intRowCount++;?>
 						<tr>
-						<td ondblclick=<?echo "deleteAttendance(".$intAttID.")";?> ><a href="#" onclick=<?echo "showPopUpWindow(".$intAttID.")";?> ><?echo $intRowCount;?></a></td>	
+						<td><a href="#" onclick=<?echo "showPopUpWindow(".$intAttID.")";?> ><img src="tools.png" width="20" height="20"></img></a> &nbsp;  &nbsp;<a href="#" onclick=<?echo "deleteAttendance(".$intAttID.")";?> ><img src="deleteIcon.png" width="20" height="20"></img></a></td>	
 						<?foreach ($arrRows as $mixKey => $mixValue) {?>
 							<?if($mixKey != "intAttendanceID" && $mixKey == "dtmDate"){?>
 								<td><?echo formatDate($mixValue);?></td>
@@ -251,10 +252,11 @@ include_once("common.php");
 					<?}
 				}
 				else{?>
-					<tr><td colspan='13'><h3 style='text-align:center;'>The is no record for that date.</h3></td></tr>
+					<tr><td colspan='13'><h3 style='text-align:center;'>There is no record for that date.</h3></td></tr>
 				<?}?>
 			</tbody>
 			</table>
+		</body>
 			<? 	
 			$strHTML .= ob_get_contents();
 			ob_end_clean();
