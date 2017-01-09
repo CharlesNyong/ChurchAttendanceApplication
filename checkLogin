@@ -1,0 +1,38 @@
+<?php
+include_once("Conn.php");
+//var_dump($_POST);
+if($_POST){
+	if(!authenticateLogin($_POST["UserName"], $_POST["PassWord"])){
+		$_SESSION["strErrorMessage"] = "Invalid UserName or PassWord";
+		header("Location: login.php?strErrorMessage='Invalid username or password' "); 
+	}
+	else{
+		//echo "second case";
+		$_SESSION["blnAuthenticated"] = 1; 
+		header("Location: main.php?blnAuthenticated='1'");
+	}
+}
+
+
+function authenticateLogin($strUserName, $strPassWord){
+	global $connection;
+
+	$strSQL = "SELECT intAdminID
+				FROM asikpo_attendance.tblAdministrator
+				WHERE strUserName = '$strUserName'
+				AND strPassword = '$strPassWord' ";
+
+	$rsResult = mysqli_query($connection, $strSQL);
+	//echo "Query Used: ". $strSQL;
+	$arrRow = mysqli_fetch_assoc($rsResult);
+
+	if(!$arrRow["intAdminID"]){
+		return 0;
+	}
+	else{
+		return 1;
+	}				
+}
+
+
+?>
