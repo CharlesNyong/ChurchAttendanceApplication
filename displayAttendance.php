@@ -1,4 +1,7 @@
 <?php
+if(!($_GET["blnAuthenticated"] || $_POST["blnAuthenticated"]) ){
+	header("Location: login.php");
+}
 include_once("Conn.php");
 include_once("common.php");
 
@@ -44,6 +47,7 @@ include_once("common.php");
 				window.onload = function(){
 					 
 					 $("#dateFilter").datepicker();
+					 //document.getElementById("blnAuthenticated").value = 1;
 					 // objMyGrid = new dhtmlXGridObject('attendanceDiv');                 
       //   			  objMyGrid.setHeader("Date,Day,MenCount,WomenCount,ChildrenCount,Total,SundaySchoolCount");//the headers of columns  
       //   			  objMyGrid.setImagePath("dhtmlxGrid/skins/skyblue/imgs/dhxgrid_skyblue/");
@@ -188,6 +192,7 @@ include_once("common.php");
 				<input type="hidden" value="0" id="blnLoadByMonth" name="blnLoadByMonth"/>
 				<input type="hidden" value="0" id="blnLoadAll" name="blnLoadAll"/>
 				<input type="hidden" value="0" id="blnDeleteAttendance" name="blnDeleteAttendance"/>
+				<input type="hidden" value="1" id="blnAuthenticated" name="blnAuthenticated"/>
 			</form>
 			 
 			<? 	
