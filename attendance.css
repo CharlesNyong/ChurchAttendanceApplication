@@ -2,6 +2,11 @@
 	width: 890px;
 }
 
+.scrollable{
+  height: 400px;
+  overflow-y: scroll;
+}
+
 .ui-datepicker {
     background: white;
     border: 1px solid #555;
@@ -19,4 +24,101 @@ a:link {
 
 .attDetailsInputField{
 	background: #FFFACD;
+}
+
+.appDirectoryTable{
+	width: 600px;
+	margin: auto;
+	text-align: center;
+	background-color: white;
+}
+
+.dirTableCell{
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+#ServiceField{
+  width: 196px;
+}
+
+#PreacherField{
+  width: 190px;
+}
+
+#FirstTimerField{
+  width: 60px;
+}
+
+#MaleField{
+  width: 60px;
+}
+
+#MaleStdField{
+  width: 60px;
+}
+
+#FemaleField{
+  width: 60px;
+}
+
+#FemaleStdField{
+  width: 60px;
+}
+
+#ChildrenField{
+  width: 60px;
+}
+
+#sundaySchField{
+  width: 60px;
+}
+
+#totalField{
+  width: 60px;
+}
+
+#sundaySchField{
+  width: 60px;
+}
+
+.monthFilterSection{
+  padding-top: 3px;
+  clear: both;
+}
+
+#directoryTable{
+	position: center;
+}
+
+.newAttendanceBtn {
+  background: #8aa2b3;
+  background-image: -webkit-linear-gradient(top, #8aa2b3, #83a4b8);
+  background-image: -moz-linear-gradient(top, #8aa2b3, #83a4b8);
+  background-image: -ms-linear-gradient(top, #8aa2b3, #83a4b8);
+  background-image: -o-linear-gradient(top, #8aa2b3, #83a4b8);
+  background-image: linear-gradient(to bottom, #8aa2b3, #83a4b8);
+  -webkit-border-radius: 13;
+  -moz-border-radius: 13;
+  border-radius: 13px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  width: 148px;
+  height: 12px;
+  text-align:center;
+  line-height: 10px;
+  padding: 10px 20px 10px 20px;
+  border: solid #c1d6e3 2px;
+  text-decoration: none;
+}
+
+.newAttendanceBtn:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
 }
