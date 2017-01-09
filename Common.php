@@ -53,4 +53,27 @@ function deleteAttendanceAjax(){
 	echo json_encode($data);
 }
 
+function validateLogin(){
+	global $connection;
+	$strUserName = $_POST["userName"];
+	$strPassword = $_POST["Pword"];
+
+	$strSQL = "SELECT intAdminID
+				FROM asikpo_attendance.tblAdministrator
+				WHERE strUserName = '$strUserName'
+				AND strPassword = '$strPassword' ";
+
+	$rsResult = mysqli_query($connection, $strSQL);
+	//echo "Query Used: ". $strSQL;
+	$arrRow = mysqli_fetch_assoc($rsResult);
+
+	if($arrRow["intAdminID"]){
+		$data[1] = true;
+	}
+	else{
+		$data[1] = false;
+	}
+
+	echo json_encode($data);					
+}
 ?>
