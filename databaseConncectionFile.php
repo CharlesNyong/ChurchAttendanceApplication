@@ -5,7 +5,7 @@
  $db_username = "asikpo_cnyong";
  $db_name = "asikpo_attendance";
  $host = "localhost";
- $password = "tog1767";
+ $password = "";
 
  $connection = mysqli_connect($host, $db_username, $password, $db_name);
 
